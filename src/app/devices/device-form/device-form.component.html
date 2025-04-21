@@ -1,1 +1,70 @@
-<p>device-form works!</p>
+<!-- 🔹 Header -->
+<div class="form-header">
+  <h2>{{ isEditMode ? "Editar Dispositivo" : "Novo Dispositivo" }}</h2>
+  <button mat-stroked-button color="primary" routerLink="/devices">
+    Voltar
+  </button>
+</div>
+
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+<!-- 💠 Container centralizado -->
+<div class="form-wrapper">
+  <mat-card>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="device-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Part Number</mat-label>
+        <input matInput type="number" formControlName="partNumber" />
+        <mat-error *ngIf="form.get('partNumber')?.hasError('required')">
+          Campo obrigatório
+        </mat-error>
+        <mat-error *ngIf="form.get('partNumber')?.hasError('min')">
+          Deve ser um número positivo
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Cor</mat-label>
+        <input matInput formControlName="color" />
+        <mat-error *ngIf="form.get('color')?.hasError('required')">
+          Campo obrigatório
+        </mat-error>
+        <mat-error *ngIf="form.get('color')?.hasError('pattern')">
+          Apenas letras, até 16 caracteres
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Categoria</mat-label>
+        <mat-select formControlName="categoryId">
+          <mat-option *ngFor="let cat of categories" [value]="cat.id">
+            {{ cat.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('categoryId')?.hasError('required')">
+          Categoria obrigatória
+        </mat-error>
+        <mat-error *ngIf="form.get('partNumber')?.hasError('conflict')">
+          Este part number já está em uso.
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-card>
+
+  <!-- 🔸 Footer -->
+  <div class="form-footer">
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      [disabled]="form.invalid || isSubmitting"
+      (click)="onSubmit()"
+    >
+      {{ isSubmitting ? "Salvando..." : isEditMode ? "Atualizar" : "Salvar" }}
+    </button>
+
+    <button mat-stroked-button color="warn" routerLink="/devices">
+      Cancelar
+    </button>
+  </div>
+</div>

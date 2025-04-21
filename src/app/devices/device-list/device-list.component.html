@@ -1,1 +1,100 @@
-<p>device-list works!</p>
+<!-- 🔹 Cabeçalho -->
+<div class="device-header">
+  <h2>Dispositivos</h2>
+
+  <div class="filters">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Buscar</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        matInput
+        [formControl]="searchControl"
+        placeholder="Digite o part number..."
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        *ngIf="searchControl.value"
+        (click)="clearSearch()"
+        aria-label="Limpar"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" [routerLink]="['/devices/create']">
+      Novo Dispositivo
+    </button>
+  </div>
+</div>
+
+<!-- 🔄 Loading -->
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+<!-- 📦 Tabela de dados -->
+<mat-card class="device-card">
+  <mat-table
+    [dataSource]="devices"
+    matSort
+    (matSortChange)="onSortChange($event)"
+    class="device-table"
+  >
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+      <mat-cell *matCellDef="let device">{{ device.id }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="partNumber">
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Part Number</mat-header-cell
+      >
+      <mat-cell *matCellDef="let device">{{ device.partNumber }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="color">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Cor</mat-header-cell>
+      <mat-cell *matCellDef="let device">{{ device.color }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Categoria</mat-header-cell
+      >
+      <mat-cell *matCellDef="let device">{{ device.category?.name }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef class="actions-column"
+        >Ações</mat-header-cell
+      >
+      <mat-cell *matCellDef="let device" class="actions-column">
+        <button
+          mat-icon-button
+          color="primary"
+          [routerLink]="['/devices', device.id, 'edit']"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="openDeleteDialog(device.id)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <mat-paginator
+    [length]="total"
+    [pageSize]="limit"
+    [pageIndex]="page - 1"
+    (page)="onPageChange($event)"
+    showFirstLastButtons
+  >
+  </mat-paginator>
+</mat-card>
