@@ -3,10 +3,11 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Category } from '../models/category.model';
 import { PaginatedResponse } from '../models/paginated.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class CategoryService {
-  private baseUrl = 'http://localhost:3000/categories';
+    private baseUrl = `http://${environment.apiUrl}:3000/categories`;
 
   constructor(private http: HttpClient) {}
 
