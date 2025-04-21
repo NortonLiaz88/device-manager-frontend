@@ -1,0 +1,36 @@
+.form-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-wrapper mat-card {
+  padding: 24px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.category-form {
+  display: grid;
+  gap: 16px;
+}
+
+.form-header,
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px auto;
+  max-width: 600px;
+  gap: 16px;
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+}

@@ -1,0 +1,89 @@
+<!-- 🔷 Header separado do card -->
+<div class="category-header">
+  <h2>Categorias</h2>
+
+  <div class="filters">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Buscar</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        matInput
+        type="text"
+        [formControl]="searchControl"
+        placeholder="Digite o nome da categoria..."
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        *ngIf="searchControl.value"
+        (click)="clearSearch()"
+        aria-label="Limpar"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <button
+      mat-flat-button
+      color="primary"
+      [routerLink]="['/categories/create']"
+    >
+      Nova Categoria
+    </button>
+  </div>
+</div>
+
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+<mat-card class="category-card">
+  <mat-table
+    [dataSource]="categories"
+    matSort
+    (matSortChange)="onSortChange($event)"
+    class="category-table"
+  >
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+      <mat-cell *matCellDef="let category">{{ category.id }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Nome</mat-header-cell>
+      <mat-cell *matCellDef="let category">{{ category.name }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef class="actions-column"
+        >Ações</mat-header-cell
+      >
+      <mat-cell *matCellDef="let category" class="actions-column">
+        <button
+          mat-icon-button
+          color="primary"
+          [routerLink]="['/categories', category.id, 'edit']"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="openDeleteDialog(category.id)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <mat-paginator
+    [length]="total"
+    [pageSize]="limit"
+    [pageIndex]="page - 1"
+    (page)="onPageChange($event)"
+    showFirstLastButtons
+  >
+  </mat-paginator>
+</mat-card>
